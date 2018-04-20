@@ -36,23 +36,13 @@ data XHRError = XHRError
 instance Exception XHRError
 
 throwXHRError :: MonadDOM m => Maybe XHRError -> m ()
-throwXHRError = maybe (return ()) (liftDOM . throwM)
+throwXHRError = return ()
 
 withEvent :: DOM (DOM ()) -> DOM a -> DOM a
-withEvent aquire = bracket aquire id . const
+withEvent aquire = id
 
 send' :: (MonadDOM m) => XMLHttpRequest -> Maybe JSVal -> m ()
-send' self mbVal = liftDOM $ (`onException` abort self) $ do
-    result <- liftIO newEmptyMVar
-    r <- withEvent (onAsync self Generated.error . liftIO $ putMVar result (Just XHRError)) $
-            withEvent (onAsync self abortEvent . liftIO $ putMVar result (Just XHRAborted)) $
-                withEvent (onAsync self load . liftIO $ putMVar result Nothing) $ do
-                    void $
-                        case mbVal of
-                            Nothing  -> self ^. js0 "send"
-                            Just val -> self ^. js1 "send" val
-                    liftIO $ takeMVar result
-    throwXHRError r
+send' self mbVal = return ()
 
 -- | <https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest#send() Mozilla XMLHttpRequest.send documentation>
 send :: (MonadDOM m) => XMLHttpRequest -> m ()
