@@ -953,7 +953,7 @@ module JSDOM.Types (
   ) where
 
 import Prelude ()
-import Prelude.Compat hiding((!!))
+import Prelude.Compat hiding((!!), (<>))
 import qualified Data.Text as T (unpack, Text)
 import Control.Monad.IO.Class (MonadIO(..))
 import Data.Int (Int8, Int16, Int32, Int64)
